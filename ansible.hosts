@@ -1,3 +1,4 @@
+# Ansible.hosts file for 2 leaf, 2 spine topologies in the Cumulus Workbench
 [me]
 localhost
 
