@@ -7,7 +7,7 @@
     notify:
     - restart quagga
 
- - name: Enable OSPF
+  - name: Enable OSPF
     cl_quagga_protocol: name="ospfd" state="present"
     notify:
     - restart quagga
