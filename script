@@ -9,11 +9,11 @@ Install Ansible on CW
 
 sudo apt-get install ansible
 
-wget https://raw.githubusercontent.com/plumbis/demos/master/demo/cw.yml
+wget https://raw.githubusercontent.com/plumbis/demos/master/cw.yml
 
-wget https://raw.githubusercontent.com/plumbis/demos/master/demo/ansible.hosts
+wget https://raw.githubusercontent.com/plumbis/demos/master/ansible.hosts
 
-wget https://raw.githubusercontent.com/plumbis/demos/master/demo/ansible.cfg
+wget https://raw.githubusercontent.com/plumbis/demos/master/ansible.cfg
 
 ansible-playbook cw.yml
 
