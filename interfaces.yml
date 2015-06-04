@@ -3,17 +3,7 @@
   sudo: yes
   tasks:
   - name: spine1-leaf1
-    cl_interface: name=swp49 
-  - name: spine1-leaf1-2
-    cl_interface: name=swp50
-  - name: spine1-spine2
-    cl_interface: name=swp17
-  - name: spine1-spine2-2
-    cl_interface: name=swp18
-  - name: spine1-leaf2
-    cl_interface: name=swp51
-  - name: spine1-leaf2-1
-    cl_interface: name=swp52
+    cl_interface: name=swp49 ipv4=10.12.12.1/24
   - name: loopback
     cl_interface: name=lo ipv4=10.1.1.1/32
   - name: Apply changes
@@ -22,20 +12,12 @@
 - hosts: leaf1
   sudo: yes
   tasks:
+  - name: spine1-leaf1
+    cl_interface: name=swp1s0 ipv4=10.12.12.2/24
   - name: loopback
     cl_interface: name=lo ipv4=10.2.2.2/32
   - name: leaf1-leaf2
-    cl_interface: name=swp17
-  - name: leaf1-leaf2-2
-    cl_interface: name=swp18
-  - name: leaf1-spine1
-    cl_interface: name=swp1s0
-  - name: leaf1-spine1-2
-    cl_interface: name=swp1s1
-  - name: leaf1-spine2
-    cl_interface: name=swp1s2
-  - name: leaf1-spine2-2
-    cl_interface: name=swp1s3
+    cl_interface: name=swp17 ipv4=10.23.23.2/24
   - name: Apply changes
     command: ifreload -a
 
@@ -43,38 +25,8 @@
   sudo: yes
   tasks:
   - name: lo
-    cl_interface: name=lo ipv4=10.4.4.4/32
+    cl_interface: name=lo ipv4=10.3.3.3/32
   - name: leaf2-leaf1
-    cl_interface: name=swp17
-  - name: leaf2-leaf1-2
-    cl_interface: name=swp18
-  - name: leaf2-spine2
-    cl_interface: name=swp1s0
-  - name: leaf2-spine2-2
-    cl_interface: name=swp1s1
-  - name: leaf2-spine1
-    cl_interface: name=swp1s2
-  - name: leaf2-spine1-2
-    cl_interface: name=swp1s3
-  - name: Apply changes
-    command: ifreload -a
-
-- hosts: spine2
-  sudo: yes
-  tasks:
-  - name: lo
-    cl_interface: name=lo ipv4=10.2.2.2/32
-  - name: spine2-leaf2
-    cl_interface: name=swp49 
-  - name: spine2-leaf2-2
-    cl_interface: name=swp50
-  - name: spine2-spine1
-    cl_interface: name=swp17
-  - name: spine2-spine1-2
-    cl_interface: name=swp18
-  - name: spine2-leaf1
-    cl_interface: name=swp51
-  - name: spine2-leaf1-1
-    cl_interface: name=swp52
+    cl_interface: name=swp17 ipv4=10.23.23.3/24
   - name: Apply changes
     command: ifreload -a
