@@ -7,7 +7,7 @@ cat ~/.ssh/id_rsa.pub | ssh wbench421@workbench.cumulusnetworks.com "mkdir -p ~/
 Install Ansible on CW
 =========
 
-sudo apt-get install ansible
+sudo apt-get install -y ansible
 
 wget https://raw.githubusercontent.com/plumbis/demos/master/cw.yml
 
