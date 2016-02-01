@@ -23,6 +23,7 @@
          "cl-rctl interface clear %iface% ipv6 nd suppress-ra",
          "cl-rctl interface set %iface% ipv6 nd ra-interval 5",
          "cl-bgp neighbor add %iface% peer-group fabric",
+         "cl-rctl write-config integrated",
         ]
       - ["swp17", "swp18", "swp49", "swp50", "swp51", "swp52"]
       
@@ -50,6 +51,7 @@
          "cl-rctl interface clear %iface% ipv6 nd suppress-ra",
          "cl-rctl interface set %iface% ipv6 nd ra-interval 5",
          "cl-bgp neighbor add %iface% peer-group fabric",
+         "cl-rctl write-config integrated",
         ]
       - ["swp17", "swp18", "swp49", "swp50", "swp51", "swp52"]
       
@@ -77,6 +79,7 @@
          "cl-rctl interface clear %iface% ipv6 nd suppress-ra",
          "cl-rctl interface set %iface% ipv6 nd ra-interval 5",
          "cl-bgp neighbor add %iface% peer-group fabric",
+         "cl-rctl write-config integrated",
         ]
       - ["swp17", "swp18", "swp1s0", "swp1s1", "swp1s2", "swp1s3"]
       
@@ -104,5 +107,6 @@
          "cl-rctl interface clear %iface% ipv6 nd suppress-ra",
          "cl-rctl interface set %iface% ipv6 nd ra-interval 5",
          "cl-bgp neighbor add %iface% peer-group fabric",
+         "cl-rctl write-config integrated",
         ]
       - ["swp17", "swp18", "swp1s0", "swp1s1", "swp1s2", "swp1s3"]
