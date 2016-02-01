@@ -2,15 +2,9 @@
 - hosts: network
   sudo: yes
   tasks:
-  - name: Enable BGP
-    cl_quagga_protocol: name="bgpd" state="present"
-    notify:
-    - restart quagga
-
-  - name: Enable OSPF
-    cl_quagga_protocol: name="ospfd" state="present"
-    notify:
-    - restart quagga
+  - name: Enable bgpd and zebra
+    replace: dest=/etc/quagga/daemons regexp='(bgpd|zebra|ospfd)=no' replace='\1=yes' backup=yes
+    notify: restart quagga
 
   handlers:
    - name: restart quagga
