@@ -2,31 +2,71 @@
 - hosts: spine1
   sudo: yes
   tasks:
-  - name: spine1-leaf1
-    cl_interface: name=swp49 ipv4=10.12.12.1/24
+  - name: Spine1 Ports
+    cl_interface: name={{item}}
+    with_items:
+      - swp17
+      - swp18
+      - swp49
+      - swp50
+      - swp51
+      - swp52
+    notify: restart networking
   - name: loopback
-    cl_interface: name=lo ipv4=10.1.1.1/32
-  - name: Apply changes
-    command: ifreload -a
+    cl_interface: name=lo ipv4=10.11.11.11/32
+    notify: restart networking
+    
+- hosts: spine2
+  sudo: yes
+  tasks:
+  - name: Spine2 Ports
+    cl_interface: name={{item}}
+    with_items:
+      - swp17
+      - swp18
+      - swp49
+      - swp50
+      - swp51
+      - swp52
+    notify: restart networking
+  - name: loopback
+    cl_interface: name=lo ipv4=10.22.22.22/32
+    notify: restart networking
 
 - hosts: leaf1
   sudo: yes
   tasks:
-  - name: spine1-leaf1
-    cl_interface: name=swp1s0 ipv4=10.12.12.2/24
+  - name: Spine1 Ports
+    cl_interface: name={{item}}
+    with_items:
+      - swp17
+      - swp18
+      - swp1s0
+      - swp1s1
+      - swp1s2
+      - swp1s3
+    notify: restart networking
   - name: loopback
-    cl_interface: name=lo ipv4=10.2.2.2/32
-  - name: leaf1-leaf2
-    cl_interface: name=swp17 ipv4=10.23.23.2/24
-  - name: Apply changes
-    command: ifreload -a
-
+    cl_interface: name=lo ipv4=10.1.1.1/32
+    notify: restart networking
+    
 - hosts: leaf2
   sudo: yes
   tasks:
-  - name: lo
-    cl_interface: name=lo ipv4=10.3.3.3/32
-  - name: leaf2-leaf1
-    cl_interface: name=swp17 ipv4=10.23.23.3/24
-  - name: Apply changes
-    command: ifreload -a
+  - name: Spine1 Ports
+    cl_interface: name={{item}}
+    with_items:
+      - swp17
+      - swp18
+      - swp1s0
+      - swp1s1
+      - swp1s2
+      - swp1s3
+    notify: restart networking
+  - name: loopback
+    cl_interface: name=lo ipv4=10.2.2.2/32
+    notify: restart networking
+
+  handlers:
+    - name: restart networking
+      service: name=networking state=reloaded
