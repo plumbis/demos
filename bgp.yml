@@ -2,47 +2,107 @@
 - hosts: spine1
   sudo: yes
   tasks:
-  - name: Configure BGP peer
-    shell: cl-bgp as 65001 neighbor  add 10.12.12.2 remote-as 65002
-  - name: Add lo
-    shell: cl-bgp network add 10.1.1.1/32
-  - name: Add ethernet
-    shell: cl-bgp network add 10.12.12.0/24
-  - name: update leaf 1 timers
-    shell: sudo vtysh -c "config t" -c "router bgp 65001" -c "neighbor 10.12.12.2 timers 1 3"
-  - name: Save bgp config
-    shell: sudo vtysh -c "write mem"
+  - name: Configure BGP ASN
+    command: "{{item}}"
+    with_items:
+      - cl-bgp as 65111 router-id set 10.11.11.11
+      - cl-bgp peer-group add fabric
+      - cl-bgp maximum-paths set 16
+      - cl-bgp network add 10.11.11.11/32
+      - cl-bgp bestpath set as-path multipath-relax
+      - cl-bgp neighbor add fabric remote-as external
+      - cl-bgp timers set connect 1 neighbor fabric
+      - cl-bgp timers set keepalive 1 holdtime 3 neighbor fabric
+      - cl-bgp advertisement-interval set 0 neighbor fabric
+      - cl-bgp capability set extended-nexthop neighbor fabric
+      
+  - name: Configure BGP Fabric Settings
+    command: "{{ item[0] | replace('%iface%', item[1]) }}"
+    with_nested: 
+      - ["cl-bgp interface add %iface%",
+         "cl-rctl interface clear %iface% ipv6 nd suppress-ra",
+         "cl-rctl interface set %iface% ipv6 nd ra-interval 5",
+         "cl-bgp neighbor add %iface% peer-group fabric",
+        ]
+      - ["swp17", "swp18", "swp49", "swp50", "swp51", "swp52"]
+      
+- hosts: spine2
+  sudo: yes
+  tasks:
+  - name: Configure BGP ASN
+    command: "{{item}}"
+    with_items:
+      - cl-bgp as 65222 router-id set 10.22.22.22
+      - cl-bgp peer-group add fabric
+      - cl-bgp maximum-paths set 16
+      - cl-bgp network add 10.22.22.22/32
+      - cl-bgp bestpath set as-path multipath-relax
+      - cl-bgp neighbor add fabric remote-as external
+      - cl-bgp timers set connect 1 neighbor fabric
+      - cl-bgp timers set keepalive 1 holdtime 3 neighbor fabric
+      - cl-bgp advertisement-interval set 0 neighbor fabric
+      - cl-bgp capability set extended-nexthop neighbor fabric
 
+  - name: Configure BGP Fabric Settings
+    command: "{{ item[0] | replace('%iface%', item[1]) }}"
+    with_nested: 
+      - ["cl-bgp interface add %iface%",
+         "cl-rctl interface clear %iface% ipv6 nd suppress-ra",
+         "cl-rctl interface set %iface% ipv6 nd ra-interval 5",
+         "cl-bgp neighbor add %iface% peer-group fabric",
+        ]
+      - ["swp17", "swp18", "swp49", "swp50", "swp51", "swp52"]
+      
 - hosts: leaf1
   sudo: yes
   tasks:
-  - name: Configure BGP peer spine1
-    shell: cl-bgp as 65002 neighbor add 10.12.12.1 remote-as 65001
-  - name: Configure BGP peer leaf2
-    shell: cl-bgp as 65002 neighbor add 10.23.23.3 remote-as 65003
-  - name: Add lo
-    shell: cl-bgp network add 10.2.2.2/32
-  - name: Add ethernet to spine1
-    shell: cl-bgp network add 10.12.12.0/24
-  - name: Add ethernet to leaf2
-    shell: cl-bgp network add 10.23.23.0/24
-  - name: update leaf 2 timers
-    shell: sudo vtysh -c "config t" -c "router bgp 65002" -c "neighbor 10.23.23.3 timers 1 3"
-  - name: update spine1 timers
-    shell: sudo vtysh -c "config t" -c "router bgp 65002" -c "neighbor 10.12.12.1 timers 1 3"
-  - name: Save bgp config
-    shell: sudo vtysh -c "write mem"
-
+  - name: Configure BGP ASN
+    command: "{{item}}"
+    with_items:
+      - cl-bgp as 65001 router-id set 10.1.1.1
+      - cl-bgp peer-group add fabric
+      - cl-bgp maximum-paths set 16
+      - cl-bgp network add 10.1.1.1/32
+      - cl-bgp bestpath set as-path multipath-relax
+      - cl-bgp neighbor add fabric remote-as external
+      - cl-bgp timers set connect 1 neighbor fabric
+      - cl-bgp timers set keepalive 1 holdtime 3 neighbor fabric
+      - cl-bgp advertisement-interval set 0 neighbor fabric
+      - cl-bgp capability set extended-nexthop neighbor fabric
+            
+  - name: Configure BGP Fabric Settings
+    command: "{{ item[0] | replace('%iface%', item[1]) }}"
+    with_nested: 
+      - ["cl-bgp interface add %iface%",
+         "cl-rctl interface clear %iface% ipv6 nd suppress-ra",
+         "cl-rctl interface set %iface% ipv6 nd ra-interval 5",
+         "cl-bgp neighbor add %iface% peer-group fabric",
+        ]
+      - ["swp17", "swp18", "swp1s0", "swp1s1", "swp1s2", "swp1s3"]
+      
 - hosts: leaf2
   sudo: yes
   tasks:
-  - name: Configure BGP peer
-    shell: cl-bgp as 65003 neighbor add 10.23.23.2 remote-as 65002
-  - name: Add lo
-    shell: cl-bgp network add 10.3.3.3/32
-  - name: Add ethernet
-    shell: cl-bgp network add 10.23.23.0/24
-  - name: update timers
-    shell: sudo vtysh -c "config t" -c "router bgp 65003" -c "neighbor 10.23.23.2 timers 1 3"
-  - name: Save bgp config
-    shell: sudo vtysh -c "write mem"
+  - name: Configure BGP ASN
+    command: "{{item}}"
+    with_items:
+      - cl-bgp as 65002 router-id set 10.2.2.2
+      - cl-bgp peer-group add fabric
+      - cl-bgp maximum-paths set 16
+      - cl-bgp network add 10.2.2.2/32
+      - cl-bgp bestpath set as-path multipath-relax
+      - cl-bgp neighbor add fabric remote-as external
+      - cl-bgp timers set connect 1 neighbor fabric
+      - cl-bgp timers set keepalive 1 holdtime 3 neighbor fabric
+      - cl-bgp advertisement-interval set 0 neighbor fabric
+      - cl-bgp capability set extended-nexthop neighbor fabric
+      
+  - name: Configure BGP Fabric Settings
+    command: "{{ item[0] | replace('%iface%', item[1]) }}"
+    with_nested: 
+      - ["cl-bgp interface add %iface%",
+         "cl-rctl interface clear %iface% ipv6 nd suppress-ra",
+         "cl-rctl interface set %iface% ipv6 nd ra-interval 5",
+         "cl-bgp neighbor add %iface% peer-group fabric",
+        ]
+      - ["swp17", "swp18", "swp1s0", "swp1s1", "swp1s2", "swp1s3"]
