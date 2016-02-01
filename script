@@ -29,6 +29,6 @@ ansible-playbook interfaces.yml
 
 ansible-playbook quaggad.yml
 
-ansible-playbook bgpd.yml
+ansible-playbook bgp.yml
 
 
