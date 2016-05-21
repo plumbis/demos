@@ -1,27 +1,23 @@
 ---
-- hosts: cw
-  become: yes
-  tasks:
+- name: Install Cumulus Ansible modules
+  command: ansible-galaxy install cumulus.CumulusLinux --ignore-errors
 
-  - name: Install Cumulus Ansible modules
-    command: ansible-galaxy install cumulus.CumulusLinux --ignore-errors
+- name: Generate WB key
+  user: name=cumulus generate_ssh_key=yes
 
-  - name: Generate WB key
-    user: name=cumulus generate_ssh_key=yes
+- name: Copy ZTP script
+  copy: src=provision.sh dest=/var/www/provision.sh
 
-  - name: Copy ZTP script
-    copy: src=provision.sh dest=/var/www/provision.sh
+- name: Add ZTP DHCP option
+  lineinfile: dest=/etc/dhcp/dhcpd.pools regexp="cumulus-provision-url" line="  option cumulus-provision-url \"http://192.168.0.1/provision.sh\";" state=present
+  notify:
+     - restart isc-dhcp-server    
 
-  - name: Add ZTP DHCP option
-    lineinfile: dest=/etc/dhcp/dhcpd.pools regexp="cumulus-provision-url" line="  option cumulus-provision-url \"http://192.168.0.1/provision.sh\";" state=present
-    notify:
-       - restart isc-dhcp-server    
-  
-  - name: Set Cumulus x86 OS
-    file: src=/var/www/CumulusLinux-{{os}}-amd64.bin dest=onie-installer-x86_64 state=link
+- name: Set Cumulus x86 OS
+  file: src=/var/www/CumulusLinux-{{os}}-amd64.bin dest=onie-installer-x86_64 state=link
 
-  - name: Set Cumulus x86 OS
-    copy: src=/var/www/CumulusLinux-{{os}}-powerpc.bin dest=onie-installer-powerpc state=link
+- name: Set Cumulus x86 OS
+  copy: src=/var/www/CumulusLinux-{{os}}-powerpc.bin dest=onie-installer-powerpc state=link
 
-  - name: Delete known hosts
-    file: path=/home/cumulus/.ssh/known_hosts state=absent
+- name: Delete known hosts
+  file: path=/home/cumulus/.ssh/known_hosts state=absent
