@@ -1,11 +1,4 @@
 ---
-- hosts: me
-  become: yes
-  roles:
-    - workbench
-  handlers:
-    - include: handlers/main.yml
-
 - hosts: leafs
   become: yes
   tasks:
@@ -17,5 +10,12 @@
   become: yes
   tasks:
     - include: roles/spine/tasks/reprovision.yml
+  handlers:
+    - include: handlers/main.yml
+
+- hosts: me
+  become: yes
+  roles:
+    - workbench
   handlers:
     - include: handlers/main.yml

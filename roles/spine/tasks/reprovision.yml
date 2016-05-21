@@ -1,7 +1,6 @@
 ---
 - name: Reprovision lab
   command: cl-img-select -if
-  notify: Delete known hosts
 
 - name: Reboot
   command: reboot
