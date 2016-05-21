@@ -18,7 +18,6 @@ mkdir -p /home/cumulus/.ssh
 chown -R cumulus:cumulus /home/cumulus/.ssh
 /usr/bin/wget -O /etc/network/interfaces http://192.168.0.1/interfaces
 
-sudo apt-get update
-sudo apt-get -y dist-upgrade
-
 #CUMULUS-AUTOPROVISIONING
+
+exit 0

@@ -13,5 +13,5 @@ leafs
 spines
 
 [all:vars]
-ansible_sudo_pass: CumulusLinux!
-ansible_ssh_pass: CumulusLinux!
+ansible_sudo_pass=CumulusLinux!
+ansible_ssh_pass=CumulusLinux!

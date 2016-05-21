@@ -10,15 +10,14 @@
 
 - name: Add ZTP DHCP option
   lineinfile: dest=/etc/dhcp/dhcpd.pools regexp="cumulus-provision-url" line="  option cumulus-provision-url \"http://192.168.0.1/provision.sh\";" state=present
-  notify:
-     - restart isc-dhcp-server    
+  notify: restart isc-dhcp-server    
 
 - name: Set Cumulus x86 OS
-  file: src=/var/www/CumulusLinux-{{os}}-amd64.bin dest=onie-installer-x86_64 state=link force=yes
+  file: src=/var/www/CumulusLinux-{{os}}-amd64.bin dest=/var/www/onie-installer-x86_64 state=link force=yes
 
 # 3.0 not supported on 3.0
 - name: Set Cumulus x86 OS
-  copy: src=/var/www/CumulusLinux-{{os}}-powerpc.bin dest=onie-installer-powerpc state=link force=yes
+  copy: src=/var/www/CumulusLinux-{{os}}-powerpc.bin dest=/var/www/onie-installer-powerpc state=link force=yes
   when: os != "3.0.0"
 
 - name: Delete known hosts
