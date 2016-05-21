@@ -6,14 +6,14 @@
   handlers:
     - include: handlers/main.yml
 
-- hosts: leaf
+- hosts: leafs
   become: yes
   tasks:
     - include: roles/leaf/tasks/reprovision.yml
   handlers:
     - include: handlers/main.yml
 
-- hosts: spine
+- hosts: spines
   become: yes
   tasks:
     - include: roles/spine/tasks/reprovision.yml

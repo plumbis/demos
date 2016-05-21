@@ -1,4 +1,8 @@
 ---
+- name: Delete known hosts
+  file: path=/home/cumulus/.ssh/known_hosts state=absent
+  delegate_to: 127.0.0.1
+
 - name: restart isc-dhcp-server
   service: name=isc-dhcp-server state=restarted
 

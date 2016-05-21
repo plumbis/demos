@@ -16,8 +16,8 @@
 - name: Set Cumulus x86 OS
   file: src=/var/www/CumulusLinux-{{os}}-amd64.bin dest=onie-installer-x86_64 state=link
 
+# 3.0 not supported on 3.0
 - name: Set Cumulus x86 OS
   copy: src=/var/www/CumulusLinux-{{os}}-powerpc.bin dest=onie-installer-powerpc state=link
+  when: os != "3.0.0"
 
-- name: Delete known hosts
-  file: path=/home/cumulus/.ssh/known_hosts state=absent
