@@ -1,3 +1,0 @@
-ansible_sudo_pass=CumulusLinux!
-ansible_ssh_user=cumulus
-ansible_ssh_pass=CumulusLinux!
