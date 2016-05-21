@@ -49,10 +49,10 @@ interfaces:
 
 bgp:
 
-  leaf1:
+  spine1:
     asn: "64601"
     fabric_ports: ["swp17", "swp18", "swp49", "swp50", "swp51", "swp52"]
 
-  leaf2:
+  spine2:
     asn: "64602"
     fabric_ports: ["swp17", "swp18", "swp49", "swp50", "swp51", "swp52"]
