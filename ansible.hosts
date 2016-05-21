@@ -11,7 +11,3 @@ leaf[1:2]
 [network:children]
 leafs
 spines
-
-[network:vars]
-ansible_sudo_pass=CumulusLinux!
-ansible_ssh_pass=CumulusLinux!
