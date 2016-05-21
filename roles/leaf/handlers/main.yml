@@ -6,13 +6,13 @@
   service: name=quagga state=restarted
 
 - name: reload networking
-  shell: "service networking reload"
+  service: name=networking state=reloaded
   register: networking_reload
   notify: print networking reload error
   changed_when: "networking_reload.stderr != ''"
 
 - name: reload quagga
-  shell: "service quagga reload"
+  service: name=quagga state=reloaded
   register: quagga_reload
   notify: print quagga reload error
   changed_when: "quagga_reload.stderr != ''"
