@@ -1,0 +1,6 @@
+---
+- name: Reprovision lab
+  command: cl-img-select -if
+
+- name: Reboot
+  command: reboot

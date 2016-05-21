@@ -1,0 +1,58 @@
+---
+interfaces:
+
+  spine1:
+    lo:
+      ipv6: "fd::1:1/128"
+      ipv4: "172.16.0.1/32"
+
+    swp49:
+      alias: "To Leaf1 port swp1s0"
+
+    swp50:
+      alias: "To Leaf1 port swp1s1"
+
+    swp51:
+      alias: "To Leaf2 port swp1s3"
+
+    swp52:
+      alias: "To Leaf2 port swp1s2"
+
+    swp17:
+      alias: "To Spine2 port swp17"
+
+    swp18:
+      alias: "To Spine2 port swp18"
+
+  spine2:
+    lo:
+      ipv6: "fd::1:2/128"
+      ipv4: "172.16.0.2/32"
+
+    swp49:
+      alias: "To Leaf2 port swp1s0"
+
+    swp50:
+      alias: "To Leaf2 port swp1s1"
+
+    swp51:
+      alias: "To Leaf1 port swp1s2"
+
+    swp52:
+      alias: "To Leaf1 port swp1s3"
+
+    swp17:
+      alias: "To Spine1 port swp17"
+
+    swp18:
+      alias: "To Spine1 port swp18"
+
+bgp:
+
+  leaf1:
+    asn: "64601"
+    fabric_ports: ["swp17", "swp18", "swp49", "swp50", "swp51", "swp52"]
+
+  leaf2:
+    asn: "64602"
+    fabric_ports: ["swp17", "swp18", "swp49", "swp50", "swp51", "swp52"]
