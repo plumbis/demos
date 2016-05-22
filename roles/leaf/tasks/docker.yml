@@ -1,0 +1,21 @@
+---
+- name: Remove Cumulus Repo 1/3
+  apt_repository: repo="deb http://cl-build01.cumulusnetworks.com/repos/apt Cumulus-testing main addons updates" state=absent
+
+- name: Remove Cumulus Repo 2/3
+  apt_repository: repo="deb http://cl-build01.cumulusnetworks.com/repos/apt Cumulus-testing security-updates" state=absent
+
+- name: Remove Cumulus Repo 3/3
+  apt_repository: repo="deb http://cl-build01.cumulusnetworks.com/repos/jessie jessie main" state=absent
+
+- name: Add Debian Repo
+  apt_repository: repo='deb http://ftp.us.debian.org/debian/ jessie main contrib non-free' update_cache=yes
+
+- name: Install Docker Pre-Reqs: apt transport
+  apt: name=apt-transport-https
+
+- name: Install Docker Pre-Reqs: ca certs
+  apt: name=ca-certificates 
+
+- name: Add Apt Key for Docker
+  apt_key: keyserver=p80.pool.sks-keyservers.net id=58118E89F3A912897C070ADBF76221572C52609D

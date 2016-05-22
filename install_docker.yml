@@ -1,0 +1,7 @@
+---
+- hosts: leafs
+  become: yes
+  tasks:
+    - include: roles/leaf/tasks/docker.yml
+  handlers:
+    - include: handlers/main.yml
