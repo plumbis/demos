@@ -6,7 +6,10 @@
     file: path=/etc/apt/sources.list state=absent
 
   - name: Add Debian Repo
-    lineinfile: dest=/etc/apt/sources.list line="deb http://ftp.us.debian.org/debian/ jessie main contrib non-free"
+    lineinfile: dest=/etc/apt/sources.list line="deb http://ftp.us.debian.org/debian/ jessie main contrib non-free" create=yes
+
+  - name: Update Apt Repo. Must be done by hand because of apt module requirements
+    command: apt-get -y update
 
   - name: Install Docker Pre-Reqs apt transport
     apt: name=apt-transport-https
@@ -17,5 +20,14 @@
   - name: Add Apt Key for Docker
     apt_key: keyserver=p80.pool.sks-keyservers.net id=58118E89F3A912897C070ADBF76221572C52609D
   
+  - name: Add Docker Apt Repo
+    apt_repository: repo='deb https://apt.dockerproject.org/repo debian-jessie main' state=present update_cache=yes
+
+  - name: Install Docker
+    apt: name=docker-engine
+
+  - name: Start Docker
+    service: name=docker state=started
+    
   handlers:
     - include: handlers/main.yml
