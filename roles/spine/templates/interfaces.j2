@@ -22,8 +22,5 @@ iface {{interface}}
 {% if node[interface].mtu is defined %}
   mtu {{ node[interface].mtu }}
 {% endif %}
-{% if interface != "lo" %}
-  post-up ip link set promisc on dev {{interface}}
-{% endif %}
 
 {% endfor %}
