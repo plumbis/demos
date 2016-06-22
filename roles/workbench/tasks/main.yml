@@ -13,7 +13,7 @@
   notify: restart isc-dhcp-server    
 
 - name: Set Cumulus x86 OS
-  file: src=/var/www/CumulusLinux-{{os}}-amd64.bin dest=/var/www/onie-installer-x86_64 state=link force=yes
+  file: src=/var/www/CumulusLinux-{{os}}-amd64-bcm.bin dest=/var/www/onie-installer-x86_64 state=link force=yes
 
 # 3.0 not supported on 3.0
 - name: Set Cumulus x86 OS
