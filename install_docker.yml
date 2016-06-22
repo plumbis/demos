@@ -10,11 +10,20 @@
 ##
 ## Where "leaf1" is the DNS hostname or IP address
 ## of the node to install the Docker Engine on
+## To run this directly from a Cumulus Linux switch
+## First install Ansible with
+##    apt-get install ansible
+## then
+##    ansible-playbook install_docker.yml --extra-vars "hosts=localhost"
 ####################################
 
 - hosts: "{{hosts}}"
   become: yes
   tasks:
+  - name: Verify the minimum support Cumulus Linux Version
+    fail: msg="Docker Engine is only supported on Cumulus Linux 3.0 or later"
+    when: ansible_lsb.major_release|int > 3
+
   - name: Add Debian Apt Repo
     apt_repository:
       repo: 'deb http://ftp.us.debian.org/debian/ jessie main contrib non-free'
