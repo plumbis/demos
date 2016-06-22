@@ -5,6 +5,7 @@
     - include: roles/leaf/tasks/reprovision.yml
   handlers:
     - include: handlers/main.yml
+      static: yes
 
 - hosts: spines
   become: yes
@@ -12,6 +13,7 @@
     - include: roles/spine/tasks/reprovision.yml
   handlers:
     - include: handlers/main.yml
+      static: yes
 
 - hosts: me
   become: yes
@@ -19,3 +21,4 @@
     - workbench
   handlers:
     - include: handlers/main.yml
+      static: yes
