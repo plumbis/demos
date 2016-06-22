@@ -1,23 +1,26 @@
 ---
 ####################################
 ## This playbook will install Docker Engine on a Cumulus Linux Switch
-## This has been tested with Docker Engine 1.12 and Cumulus Linux 3.0
+## This has been tested with Docker Engine 1.12 and Cumulus Linux 3.0.0
 ## This playbook is provided as a best effort solution.
 ## Please report any issues through the GitHub issues link
 ##
 ## To run the playbook issue
-##    ansible-playbook install_docker.yml --extra-vars "hosts=leaf1"
+##    ansible-playbook install_docker.yml -i leaf1, --ask-pass --ask-sudo-pass
 ##
 ## Where "leaf1" is the DNS hostname or IP address
-## of the node to install the Docker Engine on
+## of the node to install the Docker Engine on.
+##
+## !!!!! The comma (,) is required !!!!!
+##
 ## To run this directly from a Cumulus Linux switch
 ## First install Ansible with
 ##    apt-get install ansible
 ## then
-##    ansible-playbook install_docker.yml --extra-vars "hosts=localhost"
+##     ansible-playbook install_docker.yml -i localhost, --ask-pass --ask-sudo-pass
 ####################################
 
-- hosts: "{{hosts}}"
+- hosts: all
   become: yes
   tasks:
   - name: Verify the minimum support Cumulus Linux Version
