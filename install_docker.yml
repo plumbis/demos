@@ -1,27 +1,38 @@
 ---
-- hosts: leafs
+####################################
+## This playbook will install Docker Engine on a Cumulus Linux Switch
+## This has been tested with Docker Engine 1.12 and Cumulus Linux 3.0
+## This playbook is provided as a best effort solution. 
+## Please report any issues through the GitHub issues link
+##
+## To run the playbook issue
+##    ansible-playbook install_docker.yml --extra-vars "hosts=leaf1"
+## 
+## Where "leaf1" is the DNS hostname or IP address 
+## of the node to install the Docker Engine on
+####################################
+- hosts: "{{hosts}}"
   become: yes
   tasks:
-  - name: Flush 3.0 Repos
-    file: path=/etc/apt/sources.list state=absent
-
-  - name: Add Debian Repo
-    lineinfile: dest=/etc/apt/sources.list line="deb http://ftp.us.debian.org/debian/ jessie main contrib non-free" create=yes
-
-  - name: Update Apt Repo. Must be done by hand because of apt module requirements
-    command: apt-get -y update
-
-  - name: Install Docker Pre-Reqs apt transport
-    apt: name=apt-transport-https
+  - name: Add Debian Apt Repo
+    apt_repository: 
+      repo: 'deb http://ftp.us.debian.org/debian/ jessie main contrib non-free' 
+      state: present 
 
   - name: Install Docker Pre-Reqs ca certs
-    apt: name=ca-certificates 
+    apt: 
+      name: ca-certificates 
 
   - name: Add Apt Key for Docker
-    apt_key: keyserver=p80.pool.sks-keyservers.net id=58118E89F3A912897C070ADBF76221572C52609D
+    apt_key: 
+      keyserver: p80.pool.sks-keyservers.net 
+      id: 58118E89F3A912897C070ADBF76221572C52609D
   
   - name: Add Docker Apt Repo
-    apt_repository: repo='deb https://apt.dockerproject.org/repo debian-jessie main' state=present update_cache=yes
+    apt_repository: 
+      repo: 'deb https://apt.dockerproject.org/repo debian-jessie main' 
+      state: present 
+      update_cache: yes
 
   - name: Install Docker
     apt: name=docker-engine
@@ -29,12 +40,14 @@
   # - name: Make Docker Systemd directory
   #   file: path=/etc/systemd/system/docker.service.d state=directory
 
-  - name: Make Docker Systemd control file
-    file: path=/etc//etc/systemd/system/docker.service.d/noiptables.conf state=touch
+  # - name: Make Docker Systemd control file
+  #   file: path=/etc/systemd/system/docker.service.d/noiptables.conf state=touch
 
   - name: Disable Docker iptables
-    lineinfile: 
-      dest: /etc//etc/systemd/system/docker.service.d/noiptables.conf
+    lineinfile:
+      dest: /etc/systemd/system/docker.service.d/noiptables.conf
+      state: present
+      create: yes
       regexp: "{{ item.regexp }}"
       line: "{{ item.line }}"
     with_items:
@@ -44,6 +57,3 @@
 
   - name: Start Docker
     service: name=docker state=started
-    
-  handlers:
-    - include: handlers/main.yml
