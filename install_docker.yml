@@ -26,6 +26,22 @@
   - name: Install Docker
     apt: name=docker-engine
 
+  # - name: Make Docker Systemd directory
+  #   file: path=/etc/systemd/system/docker.service.d state=directory
+
+  - name: Make Docker Systemd control file
+    file: path=/etc//etc/systemd/system/docker.service.d/noiptables.conf state=touch
+
+  - name: Disable Docker iptables
+    lineinfile: 
+      dest: /etc//etc/systemd/system/docker.service.d/noiptables.conf
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+    with_items:
+      - { regexp: '^\[Service]', line: '[Service]'}
+      - { regexp: '^ExecStart=', line: 'ExecStart='}
+      - { regexp: '^ExecStart==\/usr\/bin', line: 'ExecStart=/usr/bin/docker daemon -H fd:// --iptables=false'}
+
   - name: Start Docker
     service: name=docker state=started
     
