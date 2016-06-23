@@ -4,7 +4,7 @@
   tasks:
     - include: roles/leaf/tasks/reprovision.yml
   handlers:
-    - include: handlers/main.yml
+    - include: roles/leaf/handlers/main.yml
       static: yes
 
 - hosts: spines
@@ -12,7 +12,7 @@
   tasks:
     - include: roles/spine/tasks/reprovision.yml
   handlers:
-    - include: handlers/main.yml
+    - include: roles/spine/handlers/main.yml
       static: yes
 
 - hosts: me
@@ -20,5 +20,5 @@
   roles:
     - workbench
   handlers:
-    - include: handlers/main.yml
+    - include: roles/workbench/handlers/main.yml
       static: yes

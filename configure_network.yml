@@ -3,8 +3,14 @@
   become: yes
   roles:
     - leaf
+  handlers:
+    - include: roles/leaf/handlers/main.yml
+      static: yes
 
 - hosts: spines
   become: yes
   roles:
     - spine
+  handlers:
+    - include: roles/spine/handlers/main.yml
+      static: yes
