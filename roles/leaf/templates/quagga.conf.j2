@@ -43,20 +43,20 @@ router bgp {{ bgpvars.asn }}
   neighbor {{interface}} interface
   neighbor {{interface}} peer-group fabric
   neighbor {{interface}} remote-as external
-{% endfor -%} 
+{% endfor -%}
 !
   address-family ipv6
   network {{loopback_v6}}
   neighbor fabric activate
 {% for interface in bgpvars.fabric_ports %}
   neighbor {{interface}} peer-group fabric
-{% endfor -%} 
+{% endfor -%}
   neighbor servers activate
 !
  exit-address-family
 !
 route-map prepend permit 10
- set as-path prepend {{ bgpvars.asn }} {{ bgpvars.asn }} {{ bgpvars.asn }} {{ bgpvars.asn }} 
+ set as-path prepend {{ bgpvars.asn }} {{ bgpvars.asn }} {{ bgpvars.asn }} {{ bgpvars.asn }}
 !
 ip forwarding
 !

@@ -11,7 +11,7 @@ interfaces:
 
     swp1s1:
       alias: "To Spine1 port swp50"
-    
+
     swp1s2:
       alias: "To Spine2 port swp51"
 
@@ -23,6 +23,10 @@ interfaces:
 
     swp18:
       alias: "To Leaf2 port swp18"
+
+    swp32s0:
+      alias: "To Server1"
+      ipv4: "172.16.251.1/24"
 
   leaf2:
     lo:
@@ -34,7 +38,7 @@ interfaces:
 
     swp1s1:
       alias: "To Spine1 port swp50"
-    
+
     swp1s2:
       alias: "To Spine2 port swp52"
 
@@ -46,6 +50,10 @@ interfaces:
 
     swp18:
       alias: "To Leaf2 port swp18"
+
+    swp32s0:
+      alias: "To Server2"
+      ipv4: "172.16.252.1/24"
 
 bgp:
 

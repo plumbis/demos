@@ -3,6 +3,9 @@
   cl_ports: speed_4_by_10g="swp1"
   notify: restart switchd
 
+- name: Breakout Server
+  cl_ports: speed_4_by_10g="swp32"
+
 - name: Install License
   cl_license: src="http://192.168.0.1/{{ansible_hostname}}.lic"
   notify: restart switchd
