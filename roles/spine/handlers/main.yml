@@ -10,3 +10,6 @@
 
 - name: reload quagga
   service: name=quagga state=reloaded
+
+- name: restart switchd
+  service: name=switchd state=restarted

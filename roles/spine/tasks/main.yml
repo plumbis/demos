@@ -3,6 +3,8 @@
   cl_license: src="http://192.168.0.1/{{ansible_hostname}}.lic"
   notify: restart switchd
 
+- meta: flush_handlers
+
 - name: Copy Quagga daemons file
   copy: src=daemons dest=/etc/quagga/daemons backup=yes
   notify: restart quagga
