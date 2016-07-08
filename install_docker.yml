@@ -62,5 +62,20 @@
       - { regexp: '^ExecStart=', line: 'ExecStart='}
       - { regexp: '^ExecStart==\/usr\/bin', line: 'ExecStart=/usr/bin/docker daemon -H fd:// --iptables=false'}
 
+  - name: Create Docker User Group
+    group:
+      name: docker
+      state: present
+
+  # This will add the default `cumulus` user to the docker group
+  # If other users need to be added modify this block.
+  # When running this against a Vagrant
+  # environment the default user is 'vagrant'
+  - name: Add cumulus user to docker group
+    user:
+      name: cumulus
+      group: docker
+      append: yes
+
   - name: Start Docker
     service: name=docker state=started
