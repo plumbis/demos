@@ -1,0 +1,71 @@
+---
+####################################
+## This playbook will install Windows Powershell on a Cumulus Linux Switch
+## This has been tested with Powershell for Ubuntu 16.04 v6.0.0-alpha.9
+## and Cumulus Linux 3.0.1.
+##
+## This playbook is provided as a best effort solution.
+## Please report any issues through the GitHub issues link
+##
+## To run the playbook issue
+##    ansible-playbook install_powershell.yml -i leaf1, --ask-pass --ask-sudo-pass
+##
+## Where "leaf1" is the DNS hostname or IP address
+## of the node to install the Docker Engine on.
+##
+## !!!!! The comma (,) is required !!!!!
+##
+## To run this directly from a Cumulus Linux switch
+## First install Ansible with
+##    apt-get install ansible
+## then
+##     ansible-playbook install_powershell.yml -i localhost, --ask-pass --ask-sudo-pass
+####################################
+
+- hosts: all
+  become: yes
+  tasks:
+  - name: Verify the minimum support Cumulus Linux Version
+    fail: msg="Docker Engine is only supported on Cumulus Linux 3.0 or later"
+    when: ansible_lsb.major_release|int > 3
+
+  # The libstdc++6 package must be pinned to the Sid repo to pull the correct version.
+  - name: Apt pin libstdc++
+    dest: /etc/apt/preferences.d/30_powershell_sid
+    block: |
+      Package: libstdc++6
+      Pin: release n=sid
+      Pin-Priority: 999
+
+  - name: Add Debian Jessie Apt Repo
+    apt_repository:
+      repo: 'deb http://ftp.us.debian.org/debian/ jessie main contrib non-free'
+      state: present
+
+  # Sid Repo is required for libicu55 powershell requirement
+  - name: Add Debian Sid Apt Repo
+    apt_repository:
+      repo: 'deb http://ftp.us.debian.org/debian/ sid main contrib non-free'
+      state: present
+      update_cache: yes
+
+  - name: Install Powershell prereq libundwind8
+    apt:
+      name: libunwind8
+
+  - name: Install Powershell preq libicu55
+    apt:
+      name: libicu55
+
+  - name: Download Powershell Ubuntu 16.04 package
+    get_url:
+        url: https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.9/powershell_6.0.0-alpha.9-1ubuntu1.16.04.1_amd64.deb
+        dest: /tmp/powershell.deb
+
+  - name: Increase virtual memory limit
+    command: ulimit -v unlimited
+
+  - name: Install Powershell
+    apt:
+      deb: /tmp/powershell.deb
+
