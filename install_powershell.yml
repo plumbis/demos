@@ -5,7 +5,11 @@
 ## and Cumulus Linux 3.0.1.
 ##
 ## This playbook is provided as a best effort solution.
-## Please report any issues through the GitHub issues link
+## Please report any issues through the GitHub issues link.
+##
+## IMPORTANT WARNING: This playbook will permanently change
+## the virtual memory limit on your Cumulus Linux device. This may
+## have adverse impact if a process is out of control.
 ##
 ## To run the playbook issue
 ##    ansible-playbook install_powershell.yml -i leaf1, --ask-pass --ask-sudo-pass
@@ -29,23 +33,28 @@
     fail: msg="Docker Engine is only supported on Cumulus Linux 3.0 or later"
     when: ansible_lsb.major_release|int > 3
 
+ # Sid Repo is required for libicu55 powershell requirement
+  - name: Add Debian Sid Apt Repo
+    apt_repository:
+      repo: 'deb http://ftp.us.debian.org/debian/ sid main contrib non-free'
+      state: present
+      update_cache: yes
+
   # The libstdc++6 package must be pinned to the Sid repo to pull the correct version.
+  # A blank mark is required due to how Ansible handles apt pinning
   - name: Apt pin libstdc++
-    dest: /etc/apt/preferences.d/30_powershell_sid
-    block: |
-      Package: libstdc++6
-      Pin: release n=sid
-      Pin-Priority: 999
+    blockinfile:
+      dest: /etc/apt/preferences.d/30_powershell_sid
+      block: |
+        Package: libstdc++6
+        Pin: release n=sid
+        Pin-Priority: 999
+      create: yes
+      marker: ""
 
   - name: Add Debian Jessie Apt Repo
     apt_repository:
       repo: 'deb http://ftp.us.debian.org/debian/ jessie main contrib non-free'
-      state: present
-
-  # Sid Repo is required for libicu55 powershell requirement
-  - name: Add Debian Sid Apt Repo
-    apt_repository:
-      repo: 'deb http://ftp.us.debian.org/debian/ sid main contrib non-free'
       state: present
       update_cache: yes
 
@@ -62,8 +71,14 @@
         url: https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.9/powershell_6.0.0-alpha.9-1ubuntu1.16.04.1_amd64.deb
         dest: /tmp/powershell.deb
 
+  # SECOND WARNING
+  # This will permanently change the amount of virtual memory
+  # a process may consume. Please use caution.
   - name: Increase virtual memory limit
-    command: ulimit -v unlimited
+    replace:
+      dest: /etc/security/limits.d/99-cumulus.conf
+      regexp: '^1\:  soft  as        1048576'
+      replace: '^1\:  soft  as        unlimited'
 
   - name: Install Powershell
     apt:
